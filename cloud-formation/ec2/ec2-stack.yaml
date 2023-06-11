@@ -1,0 +1,80 @@
+---
+
+Parameters:
+  AvailabilityZone:
+    Type: String
+    Default: us-east-1c
+  AmazonLinux2AMI:
+    Type: String
+    Default: ami-022e1a32d3f742bd8
+
+Resources:
+
+  EC2DocumentDbAccessRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: documentdb.full.access.service.role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 
+                - ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonDocDBFullAccess"
+
+  EC2DocumentDbAccessProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      InstanceProfileName: documentdb.full.access.service.profile
+      Path: /
+      Roles: 
+        - !Ref EC2DocumentDbAccessRole
+
+  EC2DocumentDbClientInstance:
+    Type: AWS::EC2::Instance
+    DependsOn: EC2DocumentDbAccessProfile
+    Properties:
+      AvailabilityZone: !Ref AvailabilityZone
+      ImageId: !Ref AmazonLinux2AMI
+      InstanceType: t2.micro
+      UserData: 
+        Fn::Base64:
+          | 
+          #!/bin/bash
+          yum update -y
+
+          # Install dependencies
+          yum install git -y
+          yum install nodejs -y
+          yum install docker -y
+
+          # Configure Docker
+          service docker start
+          systemctl enable docker
+          usermod -a -G docker ec2-user
+          chmod 666 /var/run/docker.sock
+
+          # Create test file
+          echo "git clone https://github.com/kobbikobb/simple-mongo-app" > /home/ec2-user/test.sh
+          echo "cd simple-mongo-app" >> /home/ec2-user/test.sh
+          echo "npm install" >> /home/ec2-user/test.sh
+          echo "npm run bs" >> /home/ec2-user/test.sh
+          chmod +x /home/ec2-user/test.sh
+
+          # TODO Manual: npm run bs
+      SecurityGroups:
+        - !Ref SSHSecurityGroup
+      IamInstanceProfile: !Ref EC2DocumentDbAccessProfile
+
+  SSHSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access via port 22
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 22
+          ToPort: 22
+          IpProtocol: tcp
