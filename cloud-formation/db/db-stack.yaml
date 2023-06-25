@@ -7,8 +7,20 @@ Parameters:
 
 Resources:
 
-  TestDBCluster:
+  DocumentDBClusterSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: docdb.test.security-group
+      GroupDescription: Allow inbound traffic to DocumentDb
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 27017
+          ToPort: 27017
+          CidrIp: 0.0.0.0/0 # Allow all connections for this test
+
+  DocumentDBCluster:
     Type: AWS::DocDB::DBCluster
+    DependsOn: DocumentDBClusterSecurityGroup
     Properties:
       AvailabilityZones:
         - !Ref AvailabilityZone
@@ -19,11 +31,13 @@ Resources:
       BackupRetentionPeriod: 1 # We only store backup for one day
       Port: 27017
       DeletionProtection: false
+      VpcSecurityGroupIds:
+        - !GetAtt DocumentDBClusterSecurityGroup.GroupId
 
-  TestDBInstance:
+  DocumentDBClusterInstance:
     Type: AWS::DocDB::DBInstance
     Properties:
       AvailabilityZone: !Ref AvailabilityZone
-      DBInstanceIdentifier: docdb-test-instance
-      DBClusterIdentifier: !Ref TestDBCluster
+      DBInstanceIdentifier: docdb.test.instance
+      DBClusterIdentifier: !Ref DocumentDBCluster
       DBInstanceClass: db.t4g.medium

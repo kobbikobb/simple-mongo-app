@@ -13,9 +13,15 @@ Test connecting to MongoDb
 - Open terminal
   - export AWS_PROFILE=yourprofile
   - ./cloud-formation/create-stack.sh
-- Connect to the test ec2 instance
+- Connect to the test ECT instance via SSH
+- Navigate into simple-mongo-app
+- Download the Amazon DocumentDB Certificate Authority (CA) into the EC2 instance
+- Run ./start with a valid connecting string
 
-## WORKED!!!
+## The connecting string
+In the cluster in the AWS console you will find something like this as a suggested connecting string.
+  
+mongodb://testadmin:<insertYourPassword>@docdb-test-cluster.cluster-cuttwdlndsr6.us-east-1.docdb.amazonaws.com:27017/?ssl=true&ssl_ca_certs=us-east-1-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false
 
-mongodb://testadmin:testadmin@docdb-2023-06-25-17-31-52.cluster-cuttwdlndsr6.us-east-1.docdb.amazonaws.com:27017/?tls=true&readPreference=secondaryPreferred&retryWrites=false
-
+Adjust it as follows:
+mongodb://testadmin:test1234@docdb-test-cluster.cluster-cuttwdlndsr6.us-east-1.docdb.amazonaws.com:27017/?tls=true&tlsCAFile=us-east-1-bundle.pem&readPreference=secondaryPreferred&retryWrites=false

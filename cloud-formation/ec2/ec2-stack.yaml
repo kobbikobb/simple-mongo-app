@@ -40,6 +40,9 @@ Resources:
       AvailabilityZone: !Ref AvailabilityZone
       ImageId: !Ref AmazonLinux2AMI
       InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: DocumentDb test client
       UserData: 
         Fn::Base64:
           | 
@@ -49,22 +52,18 @@ Resources:
           # Install dependencies
           yum install git -y
           yum install nodejs -y
-          yum install docker -y
 
-          # Configure Docker
-          service docker start
-          systemctl enable docker
-          usermod -a -G docker ec2-user
-          chmod 666 /var/run/docker.sock
+          # Create setup file
+          echo "git clone https://github.com/kobbikobb/simple-mongo-app" > /home/ec2-user/setup.sh
+          echo "cd simple-mongo-app" >> /home/ec2-user/setup.sh
+          echo "npm install" >> /home/ec2-user/setup.sh
+          chmod +x /home/ec2-user/setup.sh
 
-          # Create test file
-          echo "git clone https://github.com/kobbikobb/simple-mongo-app" > /home/ec2-user/test.sh
-          echo "cd simple-mongo-app" >> /home/ec2-user/test.sh
-          echo "npm install" >> /home/ec2-user/test.sh
-          echo "npm run bs" >> /home/ec2-user/test.sh
-          chmod +x /home/ec2-user/test.sh
-
-          # TODO Manual: npm run bs
+          # TODO Manually: 
+          # ./test.sh
+          # cd simple-mongo-app 
+          # Download the PEM file: wget https://truststore.pki.rds.amazonaws.com/us-east-1/us-east-1-bundle.pem
+          $ npm run bs
       SecurityGroups:
         - !Ref SSHSecurityGroup
       IamInstanceProfile: !Ref EC2DocumentDbAccessProfile
@@ -72,9 +71,11 @@ Resources:
   SSHSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
+      GroupName: ec2.ssh.security.group
       GroupDescription: Enable SSH access via port 22
       SecurityGroupIngress:
-        - CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-          IpProtocol: tcp
+          CidrIp: 0.0.0.0/0 # Allow all connections for this test
+          
