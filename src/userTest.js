@@ -1,7 +1,7 @@
 import { createUser, findUser, getUsers } from "./userModel";
 
 const createAndVerifyUser = async (user) => {
-  const existingUser = (await findUser(user.id)) ?? createUser(user);
+  const existingUser = (await findUser(user.id)) ?? await createUser(user);
   console.log("User found or created:", existingUser);
   if (existingUser.createdAt === null) {
     throw Error("Created at null for user.");
