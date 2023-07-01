@@ -1,6 +1,7 @@
 # Simple Mongo App
 
-Test connecting to MongoDb
+Test connecting to MongoDb and runs some tests.
+Included: Cloud Formation scripts to create AWS resources.
 
 ## Instructions for connecting to mongo
 - Make sure docker engine is running
@@ -12,8 +13,8 @@ Test connecting to MongoDb
 ## Instructions for connecting to AWS DocumentDb
 - Open terminal
   - export AWS_PROFILE=yourprofile
-  - ./cloud-formation/db/create-db-stack.sh
   - ./cloud-formation/ec2/create-ec2-stack.sh
+  - ./cloud-formation/db/create-db-stack.sh
 - Connect to the test ECT instance via SSH
 - Navigate into simple-mongo-app
 - Download the Amazon DocumentDB Certificate Authority (CA) into the EC2 instance
