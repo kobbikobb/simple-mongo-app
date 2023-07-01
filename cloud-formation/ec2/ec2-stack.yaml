@@ -4,7 +4,7 @@ Parameters:
   AvailabilityZone:
     Type: String
     Default: us-east-1c
-  AmazonLinux2AMI:
+  AmazonLinuxAMI:
     Type: String
     Default: ami-022e1a32d3f742bd8
 
@@ -38,7 +38,7 @@ Resources:
     DependsOn: EC2DocumentDbAccessProfile
     Properties:
       AvailabilityZone: !Ref AvailabilityZone
-      ImageId: !Ref AmazonLinux2AMI
+      ImageId: !Ref AmazonLinuxAMI
       InstanceType: t2.micro
       Tags:
         - Key: Name

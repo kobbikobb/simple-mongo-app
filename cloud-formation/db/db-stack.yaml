@@ -30,7 +30,7 @@ Resources:
       StorageEncrypted: true
       BackupRetentionPeriod: 1 # We only store backup for one day
       Port: 27017
-      DeletionProtection: false
+      DeletionProtection: false # So we can simply delete this test instance
       VpcSecurityGroupIds:
         - !GetAtt DocumentDBClusterSecurityGroup.GroupId
 
@@ -38,6 +38,6 @@ Resources:
     Type: AWS::DocDB::DBInstance
     Properties:
       AvailabilityZone: !Ref AvailabilityZone
-      DBInstanceIdentifier: docdb.test.instance
+      DBInstanceIdentifier: docdb-test-instance
       DBClusterIdentifier: !Ref DocumentDBCluster
       DBInstanceClass: db.t4g.medium

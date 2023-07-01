@@ -1,1 +1,3 @@
-aws cloudformation create-stack --stack-name ec2-test-stack --template-body file://ec2-stack.yaml --capabilities CAPABILITY_NAMED_IAM --region us-east-1
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+aws cloudformation create-stack --stack-name ec2-test-stack --template-body file://$SCRIPT_DIR/ec2-stack.yaml --capabilities CAPABILITY_NAMED_IAM --region us-east-1
