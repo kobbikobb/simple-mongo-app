@@ -42,7 +42,7 @@ Resources:
       InstanceType: t2.micro
       Tags:
         - Key: Name
-          Value: DocumentDb test client
+          Value: DocumentDb Test Client
       UserData: 
         Fn::Base64:
           | 
@@ -60,7 +60,7 @@ Resources:
           chmod +x /home/ec2-user/setup.sh
 
           # TODO Manually: 
-          # ./test.sh
+          # ./setup.sh
           # cd simple-mongo-app 
           # Download the PEM file: wget https://truststore.pki.rds.amazonaws.com/us-east-1/us-east-1-bundle.pem
           $ npm run bs
