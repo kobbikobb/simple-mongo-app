@@ -58,12 +58,6 @@ Resources:
           echo "cd simple-mongo-app" >> /home/ec2-user/setup.sh
           echo "npm install" >> /home/ec2-user/setup.sh
           chmod +x /home/ec2-user/setup.sh
-
-          # TODO Manually: 
-          # ./setup.sh
-          # cd simple-mongo-app 
-          # Download the PEM file: wget https://truststore.pki.rds.amazonaws.com/us-east-1/us-east-1-bundle.pem
-          $ npm run bs
       SecurityGroups:
         - !Ref SSHSecurityGroup
       IamInstanceProfile: !Ref EC2DocumentDbAccessProfile

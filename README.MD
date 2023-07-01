@@ -16,17 +16,19 @@ Included: Cloud Formation scripts to create AWS resources.
   - ./cloud-formation/ec2/create-ec2-stack.sh
   - ./cloud-formation/db/create-db-stack.sh
 - Connect to the test ECT instance via SSH
-- Navigate into simple-mongo-app
+- Run: ./setup.sh
+- Navigate to simple-mongo-app
 - Download the Amazon DocumentDB Certificate Authority (CA) into the EC2 instance
-- Run ./start with a valid connecting string
+- Run: npm run bs
+- Insert the adjusted connection string from below.
 
 ## AWS DocumentDb connecting string
 In the cluster in the AWS console you will find something like this as a suggested connecting string:
   
-mongodb://testadmin:<insertYourPassword>@docdb-test-cluster.cluster-cuttwdlndsr6.us-east-1.docdb.amazonaws.com:27017/?ssl=true&ssl_ca_certs=us-east-1-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false
+mongodb://testadmin:<insertYourPassword>@docdb-test-cluster.cluster-cuttwdlndsr6.us-east-1.docdb.amazonaws.com:27017/?ssl=true&ssl_ca_certs=global-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false
 
 Adjust it as follows:
-mongodb://testadmin:test1234@docdb-test-cluster.cluster-cuttwdlndsr6.us-east-1.docdb.amazonaws.com:27017/?tls=true&tlsCAFile=us-east-1-bundle.pem&readPreference=secondaryPreferred&retryWrites=false
+mongodb://testadmin:test1234@docdb-test-cluster.cluster-cuttwdlndsr6.us-east-1.docdb.amazonaws.com:27017/?tls=true&tlsCAFile=global-bundle.pem&readPreference=secondaryPreferred&retryWrites=false
 
 Note:
 Main difference is moving from SSL(Secure Sockets Layer) to TLS(Transport Layer Security).
