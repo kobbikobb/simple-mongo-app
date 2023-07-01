@@ -33,3 +33,7 @@ mongodb://testadmin:test1234@docdb-test-cluster.cluster-cuttwdlndsr6.us-east-1.d
 Note:
 Main difference is moving from SSL(Secure Sockets Layer) to TLS(Transport Layer Security).
 Overall, TLS is considered more secure and robust compared to SSL.
+
+## Clean up delete stacks
+  - ./cloud-formation/ec2/delete-ec2-stack.sh
+  - ./cloud-formation/db/delete-db-stack.sh
